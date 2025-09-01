@@ -21,7 +21,7 @@ contract Panagram is ERC1155, Ownable {
     event Panagram_VerifierUpdated(IVerifier _verifier);
     event Panagram_NewRoundStarted();
     event Panagram_ProofVerified(bool result);
-    event Panagram_NFTMinted(address winner, uint256 tokenID);
+    event Panagram_NFTMinted(address to, uint256 tokenID);
 
     error Panagram_MinTimeNotPassed(uint256 minTime, uint256 timePassed);
     error Panagram_NoRoundWinner();
@@ -40,7 +40,7 @@ contract Panagram is ERC1155, Ownable {
 
     function createRound(bytes32 _answer) external onlyOwner{
         if(s_roundStartTime == 0) {
-            s_roundStartTime == block.timestamp;
+            s_roundStartTime = block.timestamp;
             s_answer = _answer;
         } else {
             if(block.timestamp > s_roundStartTime + MIN_ROUND_DURATION){
@@ -63,8 +63,9 @@ contract Panagram is ERC1155, Ownable {
             revert Panagram_FirstPanagramNotSet();
         }
 
-        bytes32[] memory inputs = new bytes32[](1);
+        bytes32[] memory inputs = new bytes32[](2);
         inputs[0] = s_answer;
+        inputs[1] = bytes32(uint256(uint160(msg.sender)));
 
         if(s_lastCorrectGuessByUser[msg.sender] == s_currentRound){
             revert Panagram_AlreadyAnsweredCorrectly();
@@ -77,7 +78,7 @@ contract Panagram is ERC1155, Ownable {
         s_lastCorrectGuessByUser[msg.sender] = s_currentRound;
 
         if(s_currentRoundWinner == address(0)){
-            s_currentRoundWinner == msg.sender;
+            s_currentRoundWinner = msg.sender;
             _mint(msg.sender,0, 1, "");
             emit Panagram_NFTMinted(msg.sender, 1);
         } else {
