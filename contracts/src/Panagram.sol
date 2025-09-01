@@ -63,9 +63,8 @@ contract Panagram is ERC1155, Ownable {
             revert Panagram_FirstPanagramNotSet();
         }
 
-        bytes32[] memory inputs = new bytes32[](2);
+        bytes32[] memory inputs = new bytes32[](1);
         inputs[0] = s_answer;
-        inputs[1] = bytes32(uint256(uint160(msg.sender)));
 
         if(s_lastCorrectGuessByUser[msg.sender] == s_currentRound){
             revert Panagram_AlreadyAnsweredCorrectly();

@@ -18,10 +18,25 @@ contract PanagramTest is Test {
 
         panagram.createRound(ANSWER);
     }
-    //test if user get nft 1
-    function testUserGetNFT1() public {
-        vm.prank(user);
 
+    function _getProof(bytes32 guess, bytes32 correctAnswer) internal returns(bytes memory _proof){
+        uint256 NUM_ARGS = 5;
+        string[] memory inputs = new string[](NUM_ARGS);
+        inputs[0] = "npx";
+        inputs[1] = "tsx";
+        inputs[2] = "js-scripts/generateProof.ts";
+        inputs[3] = vm.toString(guess);
+        inputs[4] = vm.toString(correctAnswer);
+
+        bytes memory encodedProof = vm.ffi(inputs);
+        _proof = abi.decode(encodedProof, (bytes));
+    }
+
+    //test if user get nft 1
+    function testCorrectGuessPass() public {
+        vm.prank(user);
+        bytes memory proof = _getProof(ANSWER, ANSWER);
+        panagram.submitGuess(proof);
     }
 
     //tewst isf user gets nft 2
