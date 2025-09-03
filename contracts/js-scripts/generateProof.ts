@@ -26,7 +26,7 @@ export default async function generateProof(){
             guess_hash: inputsArray[0],
             //public inputs
             answer_hash: inputsArray[1],
-            address: inputsArray[2]
+            _address: inputsArray[2]
         };
 
         //execute the circuit to get the witness
