@@ -1,0 +1,3 @@
+export const CONTRACT_ADDRESS = "";
+export const ANSWER_HASH = "0x265ad12e24c518014142d3ca261d1480a83539b59a0b623763f288613657bb2d";
+export const ANAGRAM = "CRANALBOE";
